@@ -17,7 +17,7 @@ PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 # Some useful variables
 DEBUG=						yes
 
-ARGS=			DEBUG=$(DEBUG) -s --warn-undefined-variables -C
+ARGS=			DEBUG=$(DEBUG) SANITIZER=no -s --warn-undefined-variables -C
 
 CURRENT_DIR=		${PWD}
 
@@ -61,11 +61,8 @@ $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS))):
 			@$(ECHO) "$(YELLOW)$(LIB_DIR)$(_proj)/ :$(CLEAR)\n"
 			@$(MAKE) $(ARGS) $(LIB_DIR)$(_proj) $(_rule);
 
-zappy_ai:
-			@$(MAKE) $(PROJECT_DIR)client
-
-zappy_server:
-			@$(MAKE) $(PROJECT_DIR)server
+run:
+		qemu-system-i386 -kernel build/kernel.bin
 
 .PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))) \
 	$(LIBS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS)))

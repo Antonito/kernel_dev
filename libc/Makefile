@@ -10,12 +10,11 @@ LOCAL_ASFLAGS=
 LOCAL_DEBUG_CFLAGS=
 
 LOCAL_COMP_CFLAGS=	-O2												\
-										-nostdinc									\
-										-nodefaultlibs						\
 										-nostdlib									\
 										-m32											\
 										-ffreestanding						\
-										-target i386-pc-none-elf
+										-target i386-pc-none-elf	\
+										-isystem ./include
 
 LOCAL_COMP_FLAGS=
 
@@ -41,7 +40,7 @@ HEADER=
 
 SRC_FILES= $(shell find -E . -regex '.*\.(asm|s|c|cpp)' | cut -c7-)
 
-SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
+SRC=			$(addprefix $(SRC_DIR), $(SRC_FILES))
 
 
 INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)
