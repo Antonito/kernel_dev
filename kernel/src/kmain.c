@@ -1,5 +1,9 @@
-void kmain(void *info, unsigned int eax) {
-  if (eax != 0xBADB002) {
+#include <multiboot.h>
+
+void kmain(multiboot_info_t *info, unsigned int eax);
+
+void kmain(multiboot_info_t *info, unsigned int eax) {
+  if (eax != MULTIBOOT_BOOTLOADER_MAGIC) {
     return;
   }
 

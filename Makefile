@@ -61,8 +61,5 @@ $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS))):
 			@$(ECHO) "$(YELLOW)$(LIB_DIR)$(_proj)/ :$(CLEAR)\n"
 			@$(MAKE) $(ARGS) $(LIB_DIR)$(_proj) $(_rule);
 
-run:
-		qemu-system-i386 -kernel build/kernel.bin
-
 .PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))) \
 	$(LIBS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS)))

@@ -46,7 +46,9 @@ SRC_DIR=	./src/
 
 INCLUDE_DIR=
 
-DIR_LIST=	$(SRC_DIR)
+DIR_LIST=	$(SRC_DIR)									\
+					$(SRC_DIR)arch							\
+					$(SRC_DIR)arch/x86
 
 HEADER=
 
@@ -66,3 +68,6 @@ include $(MK_COMMON_DIR)rules_osx.mk
 else
 include $(MK_COMMON_DIR)rules.mk
 endif
+
+run:
+		qemu-system-i386 -kernel $(NAME)

@@ -119,7 +119,5 @@ re:
 		@$(MAKE) fclean
 		@$(MAKE) all
 
-run:
-		./$(NAME)
 
-.PHONY: all clean fclean re infos run
+.PHONY: all clean fclean re infos
