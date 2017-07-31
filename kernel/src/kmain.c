@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <drivers/serial.h>
 #include <kernel/logger.h>
 #include <multiboot.h>
@@ -13,8 +14,9 @@ void kmain(multiboot_info_t *info, unsigned int eax) {
   }
 
   init_system();
-
-  LOG(LOG_INFO, "System booted\n");
+  LOG(LOG_INFO, "System booted\n\r");
+  assert(0 && "You suck !");
+  LOG(LOG_INFO, "Should not be printed\n\r");
   for (;;) {
     __asm__("hlt;");
   }

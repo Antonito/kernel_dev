@@ -127,6 +127,9 @@ int32_t serial_vprintf(char const *restrict format, va_list ap) {
 
   size_t ite = 0;
 
+  // TODO: Improve perf (don't write char by char ? :p ), support more
+  // formating options
+
   assert(format && ap && "Format string and va list cannot be nullptr");
   while (format[ite]) {
     if (format[ite] == '%' && format[ite + 1]) {
@@ -150,7 +153,7 @@ int32_t serial_vprintf(char const *restrict format, va_list ap) {
         serial_write_nb(SERIAL_COM1, _nbX, 16);
       } break;
       default:
-        assert(0 && "Not supported format string");
+        assert(0 && "Not supported format string option");
         break;
       }
 
