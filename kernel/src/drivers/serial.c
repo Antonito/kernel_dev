@@ -111,5 +111,5 @@ void serial_write(uint16_t const port, void const *str, size_t len) {
 int32_t serial_vprintf(const char *restrict format, va_list ap) {
   // TODO: Implement
   serial_write_str(SERIAL_COM1, format);
-  return strlen(format);
+  return (int32_t)strlen(format);
 }

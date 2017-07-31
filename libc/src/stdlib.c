@@ -14,8 +14,8 @@ __attribute__((noreturn)) void abort_handler(const char *const msg,
   __asm__("cli;");
 
   // Log information to logger
-  logger_set_level(LOG_CRITICAL);
-  logger_write("System aborted: %s [%s:%s]\n", msg, file, line);
+  g_klogger.set_level(LOG_CRITICAL);
+  LOG("System aborted: %s [%s:%s]\n", msg, file, line);
 
   // Halt system
   for (;;) {
