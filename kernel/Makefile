@@ -23,7 +23,6 @@ LOCAL_COMP_CFLAGS=	-m32											\
 										-mno-sse4.2 							\
 										-mno-sse4									\
 										-target i386-pc-none-elf	\
-										-nostdinc									\
 										-isystem ./include				\
 										-isystem ../libc/include
 
@@ -48,7 +47,8 @@ INCLUDE_DIR=
 
 DIR_LIST=	$(SRC_DIR)									\
 					$(SRC_DIR)arch							\
-					$(SRC_DIR)arch/x86
+					$(SRC_DIR)arch/x86					\
+					$(SRC_DIR)drivers
 
 HEADER=
 

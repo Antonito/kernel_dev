@@ -2,6 +2,18 @@
 #include <string.h>
 
 //
+// Strings
+//
+size_t strlen(char const *str) {
+  char const *s1 = str;
+
+  while (*s1) {
+    ++s1;
+  }
+  return (size_t)(s1 - str);
+}
+
+//
 // Memory
 //
 

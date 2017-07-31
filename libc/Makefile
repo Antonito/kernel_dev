@@ -30,7 +30,7 @@ LD=			$(CC)
 
 SRC_DIR=	./src/
 
-INCLUDE_DIR=
+INCLUDE_DIR=	../kernel/include
 
 DIR_LIST=	$(SRC_DIR)
 

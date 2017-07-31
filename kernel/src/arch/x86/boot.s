@@ -25,7 +25,7 @@ boot_stack_top:
 	section	.text
 	align	0x4
 MultiBootHeader:
-	;; Le heade multiboot GRUB
+	;; Multiboot header
 	dd	MULTIBOOT_HEADER_MAGIC
 	dd	MULTIBOOT_HEADER_FLAGS
 	dd	MULTIBOOT_CHECKSUM

@@ -6,6 +6,9 @@
 extern "C" {
 #endif
 
+// String utilities
+size_t strlen(char const *str);
+
 // Memory utilities
 void *memset(void *buff, int c, size_t n);
 void *memcpy(void *restrict dst, void const *restrict src, size_t n);
