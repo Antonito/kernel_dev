@@ -61,5 +61,8 @@ $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS))):
 			@$(ECHO) "$(YELLOW)$(LIB_DIR)$(_proj)/ :$(CLEAR)\n"
 			@$(MAKE) $(ARGS) $(LIB_DIR)$(_proj) $(_rule);
 
+run:
+	@$(MAKE) $(ARGS) kernel run
+
 .PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))) \
 	$(LIBS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS)))

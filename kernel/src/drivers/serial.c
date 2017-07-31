@@ -74,7 +74,7 @@ void serial_write_nb(uint16_t const port, const uint32_t nb,
 }
 
 // Writes a NUL-terminated string
-void serial_write_str(uint16_t const port, const char *str) {
+void serial_write_str(uint16_t const port, char const *str) {
   assert(str);
   assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
          port == SERIAL_COM4);
@@ -108,8 +108,21 @@ void serial_write(uint16_t const port, void const *str, size_t len) {
     ;
 }
 
-int32_t serial_vprintf(const char *restrict format, va_list ap) {
+//
+// Variadic print
+//
+
+int32_t serial_vprintf(char const *restrict format, va_list ap) {
   // TODO: Implement
   serial_write_str(SERIAL_COM1, format);
   return (int32_t)strlen(format);
+}
+
+int32_t serial_printf(char const *restrict format, ...) {
+  va_list ap;
+
+  va_start(ap, format);
+  int32_t ret = serial_vprintf(format, ap);
+  va_end(ap);
+  return ret;
 }
