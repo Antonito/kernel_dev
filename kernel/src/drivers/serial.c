@@ -57,8 +57,19 @@ void serial_put(uint16_t const port, uint8_t const a) {
   outb(port, a);
 }
 
+// Write a signed number
+void serial_write_nb_signed(uint16_t const port, int32_t nb,
+                            const uint8_t base) {
+  assert(base == 10);
+  if (nb < 0) {
+    serial_put(port, '-');
+    nb *= -1;
+  }
+  serial_write_nb(port, (uint32_t)nb, base);
+}
+
 // Write a number
-void serial_write_nb(uint16_t const port, const uint32_t nb,
+void serial_write_nb(uint16_t const port, uint32_t const nb,
                      const uint8_t base) {
   static char const *const _base = "0123456789ABCDEF";
 
@@ -113,9 +124,43 @@ void serial_write(uint16_t const port, void const *str, size_t len) {
 //
 
 int32_t serial_vprintf(char const *restrict format, va_list ap) {
-  // TODO: Implement
-  serial_write_str(SERIAL_COM1, format);
-  return (int32_t)strlen(format);
+
+  size_t ite = 0;
+
+  assert(format && ap && "Format string and va list cannot be nullptr");
+  while (format[ite]) {
+    if (format[ite] == '%' && format[ite + 1]) {
+      ++ite;
+
+      switch (format[ite]) {
+      case 's': {
+        char const *_tmp = va_arg(ap, char *);
+        serial_write_str(SERIAL_COM1, _tmp);
+      } break;
+      case 'd': {
+        int32_t _nb = va_arg(ap, int32_t);
+        serial_write_nb_signed(SERIAL_COM1, _nb, 10);
+      } break;
+      case 'u': {
+        uint32_t _nbu = va_arg(ap, uint32_t);
+        serial_write_nb(SERIAL_COM1, _nbu, 10);
+      } break;
+      case 'x': {
+        uint32_t _nbX = va_arg(ap, uint32_t);
+        serial_write_nb(SERIAL_COM1, _nbX, 16);
+      } break;
+      default:
+        assert(0 && "Not supported format string");
+        break;
+      }
+
+    } else {
+      serial_put(SERIAL_COM1, (uint8_t)format[ite]);
+    }
+
+    ++ite;
+  }
+  return (int32_t)ite;
 }
 
 int32_t serial_printf(char const *restrict format, ...) {

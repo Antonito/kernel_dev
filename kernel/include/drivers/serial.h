@@ -19,6 +19,8 @@ void serial_init(uint16_t const port);
 void serial_put(uint16_t const port, uint8_t const a);
 void serial_write_str(uint16_t const port, char const *str);
 void serial_write(uint16_t const port, void const *str, size_t len);
+void serial_write_nb_signed(uint16_t const port, int32_t nb,
+                            const uint8_t base);
 void serial_write_nb(uint16_t const port, uint32_t const nb,
                      uint8_t const base);
 int32_t serial_vprintf(char const *restrict format, va_list ap);

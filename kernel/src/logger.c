@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <drivers/cmos.h>
 #include <drivers/serial.h>
 #include <kernel/logger.h>
 #include <stdarg.h>
@@ -60,17 +61,25 @@ kernel_logger_print_header(uint8_t const output,
                            enum kernel_logger_level_e const lvl) {
   static char const *const level_str[] = {"DEBUG", "INFO", "WARNING", "ERROR",
                                           "CRITICAL"};
+  static char const *_months[] = {"",     "Jan.", "Fev.", "Mar.", "Apr.",
+                                  "May.", "Jun.", "Jul.", "Aug.", "Sep.",
+                                  "Oct.", "Nov.", "Dec."};
   int32_t ret = 0;
+  cmos_rtc_t date = {0, 0, 0, 1, 1, 0, 0};
 
+  cmos_RTC(&date);
   // Print log header
   if (output & LOG_SERIAL) {
     // Output on serial port
-    ret += serial_printf("{%s} ", level_str[lvl]);
+    ret +=
+        serial_printf("[%d %s %d:%d:%d] {%s} ", date.day, _months[date.month],
+                      date.hour, date.minuts, date.seconds, level_str[lvl]);
   }
 
   if (output & LOG_GRAPHIC) {
     // Output on screen display
-    ret += printf("{%s} ", level_str[lvl]);
+    ret += printf("[%d %s %d:%d:%d] {%s} ", date.day, _months[date.month],
+                  date.hour, date.minuts, date.seconds, level_str[lvl]);
   }
 
   return ret;

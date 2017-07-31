@@ -14,7 +14,7 @@ void kmain(multiboot_info_t *info, unsigned int eax) {
 
   init_system();
 
-  LOG("System booted\n");
+  LOG(LOG_INFO, "System booted\n");
   for (;;) {
     __asm__("hlt;");
   }

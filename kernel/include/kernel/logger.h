@@ -19,7 +19,7 @@ enum kernel_logger_output_e {
 #if defined KERNEL_NO_LOG
 #define LOG(...)
 #else
-#define LOG(fmt, ...) g_klogger.log(g_klogger.level, fmt, ##__VA_ARGS__)
+#define LOG(lvl, fmt, ...) g_klogger.log(lvl, fmt, ##__VA_ARGS__)
 #endif
 
 struct kernel_logger_t {
