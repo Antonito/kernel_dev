@@ -19,7 +19,7 @@ void kmain(multiboot_info_t *info, unsigned int eax) {
 
   init_system();
   LOG(LOG_INFO, "System booted\n\r");
-  g_klogger.set_output(LOG_GRAPHIC);
+  g_klogger.set_output(LOG_GRAPHIC | LOG_SERIAL);
   LOG(LOG_INFO, "Welcome to BordOS !\n\r");
   for (;;) {
     __asm__("hlt;");

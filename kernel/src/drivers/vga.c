@@ -52,9 +52,9 @@ static void vga_move_cursor(void) {
   uint32_t const temp = vga_data.y * vga_width + vga_data.x;
 
   outb(0x3D4, 14);
-  outb(0x3D5, (uint8_t)(temp >> 8));
+  outb(0x3D5, temp >> 8);
   outb(0x3D4, 15);
-  outb(0x3D5, (uint8_t)(temp));
+  outb(0x3D5, temp & 0xFF);
 }
 
 void vga_setcolor(enum vga_color_e const fg, enum vga_color_e const bg) {
@@ -65,7 +65,7 @@ void vga_clear(void) {
   uint16_t blank = 0x20 | (vga_data.attr);
 
   // Fill buffer
-  for (int32_t i = 0; i < vga_width; ++i) {
+  for (int32_t i = 0; i < vga_width * vga_height; ++i) {
     vga_data.buff[i] = blank;
   }
 
@@ -88,23 +88,27 @@ void vga_put(uint8_t const c) {
       --vga_data.x;
     }
   }
+
   // Increment x to a point that will make it divisible by 8
   else if (c == '\t') {
     vga_data.x = (vga_data.x + 8) & ~(8 - 1);
   }
+
   // Bring cursor back to the margin
   else if (c == '\r') {
     vga_data.x = 0;
   }
+
   // Handle new line just like in DOS and BIOS
   else if (c == '\n') {
     vga_data.x = 0;
     ++vga_data.y;
   }
+
   // Any character >= ' ' is printable
   else if (c >= ' ') {
-    uint16_t *const where = vga_buffer + (vga_data.y * vga_width + vga_data.x);
-    *where = c | (uint8_t)(vga_data.attr << 8);
+    uint16_t *const where = &vga_buffer[vga_data.y * vga_width + vga_data.x];
+    *where = ((uint16_t)c | (uint16_t)vga_data.attr << 8);
     ++vga_data.x;
   }
 
@@ -141,6 +145,7 @@ void vga_write_nb(uint32_t const nb, const uint8_t base) {
 }
 
 void vga_write_str(char const *str) {
+  assert(str);
   while (*str) {
     vga_put((uint8_t)*str);
     ++str;
@@ -150,4 +155,5 @@ void vga_write_str(char const *str) {
 void vga_init(void) {
   LOG(LOG_INFO, "Initializing VGA screen\n\r");
   vga_clear();
+  vga_setcolor(VGA_LIGHT_GREY, VGA_BLACK);
 }

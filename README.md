@@ -11,10 +11,10 @@ This project has an educational-only purpose.
   - [ ] GDT
   - [ ] IRQ
   - [ ] ISR
-- [ ] Logger
+- [x] Logger
   - [x] Date / Time detection
   - [x] Serial
-  - [ ] VGA
+  - [x] VGA
 - [ ] Memory Management Unit
   - [ ] PMM
   - [ ] VMM
