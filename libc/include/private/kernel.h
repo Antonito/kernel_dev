@@ -7,3 +7,6 @@
 
 // Logger stuff
 #include "kernel/logger.h"
+
+// VGA stuff
+#include "drivers/vga.h"

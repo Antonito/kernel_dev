@@ -17,7 +17,7 @@ TARGET=		native
 
 # Compilation and link definitions
 AS=				nasm
-CC=				gcc
+CC=				i386-elf-gcc
 CXX=			g++
 CPP_VER=	c++14
 C_VER=		c11
@@ -25,7 +25,6 @@ C_VER=		c11
 # Simple OSX check
 ifeq ($(UNAME_S),Darwin)
 CXX=			clang++
-CC=				i386-elf-gcc
 endif
 
 # Debug Infos

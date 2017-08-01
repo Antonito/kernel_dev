@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <stdint.h>
 
 enum kernel_logger_level_e {
@@ -13,8 +14,11 @@ enum kernel_logger_level_e {
 
 enum kernel_logger_output_e {
   LOG_SERIAL = 0x1, // 0b00000001
-  LOG_GRAPHIC = 0x3 // 0b00000010
+  LOG_GRAPHIC = 0x2 // 0b00000010
 };
+
+_Static_assert(LOG_SERIAL + LOG_GRAPHIC == (LOG_SERIAL | LOG_GRAPHIC),
+               "Invalid logger output mode");
 
 #if defined KERNEL_NO_LOG
 #define LOG(...)

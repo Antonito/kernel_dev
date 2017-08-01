@@ -24,6 +24,8 @@ enum vga_color_e {
 void vga_init(void);
 
 void vga_setcolor(enum vga_color_e const fg, enum vga_color_e const bg);
-void vga_putchar();
-void vga_write();
+void vga_put(uint8_t const c);
+void vga_write_str(char const *str);
+void vga_write_nb_signed(int32_t nb, const uint8_t base);
+void vga_write_nb(uint32_t const nb, const uint8_t base);
 void vga_clear(void);
