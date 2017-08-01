@@ -2,10 +2,10 @@
 
 #include <stdlib.h>
 
-#if defined NDEBUG
+// TODO : Remove '1 ||'
+#if 1 || defined NDEBUG
 #define assert(x) (void)0
 #else
-
 #define assert(x)                                                              \
   do {                                                                         \
     if (!(x)) {                                                                \

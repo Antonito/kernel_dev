@@ -1,3 +1,4 @@
+#include <arch/x86/io.h>
 #include <drivers/vga.h>
 #include <kernel/logger.h>
 #include <string.h>
@@ -16,7 +17,7 @@ struct vga_data_t {
   uint8_t y;
   uint8_t attr;
   uint8_t __padding;
-  uint16_t buff[VGA_WIDTH * VGA_HEIGHT];
+  uint16_t buff[VGA_WIDTH * VGA_WIDTH];
 };
 
 #undef VGA_WIDTH
@@ -28,23 +29,33 @@ void vga_setcolor(enum vga_color_e const fg, enum vga_color_e const bg) {
   vga_data.attr = (uint8_t)((fg & 0x0F) | (bg << 4));
 }
 
+void vga_move_cursor(void) {
+  uint32_t const temp = vga_data.y * vga_width + vga_data.x;
+
+  outb(0x3D4, 14);
+  outb(0x3D5, temp >> 8);
+  outb(0x3D4, 15);
+  outb(0x3D5, temp);
+}
+
 void vga_clear(void) {
   uint16_t blank = 0x20 | (vga_data.attr);
 
   // Fill buffer
-  for (int32_t i = 0; i < sizeof(vga_data.buff) / sizeof(vga_data.buff[0]);
-       ++i) {
+  for (int32_t i = 0; i < vga_width; ++i) {
     vga_data.buff[i] = blank;
   }
 
-  // Upadte buffers
-  // memcpy(vga_buffer, vga_data.buff, vga_width * vga_height *
-  // sizeof(uint16_t));
+  // Update buffer
+  for (int32_t i = 0; i < vga_height; ++i) {
+    memcpy(vga_buffer + vga_width * i, vga_data.buff,
+           sizeof(uint16_t) * vga_width);
+  }
 
   // Update cursor
   vga_data.x = 0;
   vga_data.y = 0;
-  // vga_move_cursor();
+  vga_move_cursor();
 }
 
 void vga_init(void) {

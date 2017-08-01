@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -7,6 +8,7 @@
 size_t strlen(char const *str) {
   char const *s1 = str;
 
+  assert(str);
   while (*s1) {
     ++s1;
   }
@@ -20,6 +22,7 @@ size_t strlen(char const *str) {
 void *memset(void *buff, int c, size_t n) {
   uint8_t *cur = buff;
 
+  assert(cur);
   while (n) {
     *cur = (uint8_t)c;
     ++cur;
@@ -32,6 +35,7 @@ void *memcpy(void *restrict dst, void const *restrict src, size_t n) {
   uint8_t *d = dst;
   uint8_t const *s = src;
 
+  assert(dst && src);
   while (n) {
     *d = *s;
     ++d;
@@ -45,6 +49,7 @@ int memcmp(void const *s1, void const *s2, size_t n) {
   uint8_t const *_s1 = s1;
   uint8_t const *_s2 = s2;
 
+  assert(s1 && s2);
   while (n) {
     if (*_s1 != *_s2) {
       return *_s1 - *_s2;
