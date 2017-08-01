@@ -22,9 +22,9 @@ LOCAL_COMP_CFLAGS=	-m32											\
 										-mno-sse4.1 							\
 										-mno-sse4.2 							\
 										-mno-sse4									\
-										-target i386-pc-none-elf	\
 										-isystem ./include				\
-										-isystem ../libc/include
+										-isystem ../libc/include	\
+										--target=i686-pc-none-elf
 
 LOCAL_COMP_FLAGS=
 

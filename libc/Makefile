@@ -13,7 +13,7 @@ LOCAL_COMP_CFLAGS=	-O2												\
 										-nostdlib									\
 										-m32											\
 										-ffreestanding						\
-										-target i386-pc-none-elf	\
+										--target=i686-pc-none-elf	\
 										-isystem ./include
 
 LOCAL_COMP_FLAGS=

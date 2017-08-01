@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#if 0 && defined NDEBUG
+#if defined NDEBUG
 #define assert(x) (void)0
 #else
 
