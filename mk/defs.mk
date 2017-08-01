@@ -25,7 +25,7 @@ C_VER=		c11
 # Simple OSX check
 ifeq ($(UNAME_S),Darwin)
 CXX=			clang++
-CC=				clang
+CC=				i386-elf-gcc
 endif
 
 # Debug Infos
@@ -57,7 +57,7 @@ CXXFLAGS+=	-std=$(CPP_VER) -W -Wall -Wextra -Weffc++ \
 LDFLAGS+=	$(LOCAL_LINK_FLAGS)
 
 ifeq ($(CC),clang)
-CFLAGS+=		-Weverything
+CFLAGS+=		-Weverything --target=i686-pc-none-elf
 endif
 
 ifeq ($(CXX),clang++)

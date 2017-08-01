@@ -4,6 +4,8 @@ MK_COMMON_DIR=	./../mk/
 # Definitions for Makefile
 NAME=		$(ROOT_DIR)/build/kernel.bin
 
+DEBUG=						yes
+
 LOCAL_DEBUG_CFLAGS=
 
 LOCAL_ASFLAGS=			-f elf32
@@ -23,8 +25,7 @@ LOCAL_COMP_CFLAGS=	-m32											\
 										-mno-sse4.2 							\
 										-mno-sse4									\
 										-isystem ./include				\
-										-isystem ../libc/include	\
-										--target=i686-pc-none-elf
+										-isystem ../libc/include
 
 LOCAL_COMP_FLAGS=
 
@@ -70,4 +71,4 @@ include $(MK_COMMON_DIR)rules.mk
 endif
 
 run:
-		qemu-system-i386 -kernel $(NAME)
+		qemu-system-i386 -s -kernel $(NAME)
