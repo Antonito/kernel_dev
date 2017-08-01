@@ -39,8 +39,6 @@ void vga_clear(void) {
   // vga_move_cursor();
 }
 
-void vga_clear(void) {}
-
 void vga_init(void) {
   // LOG(LOG_INFO, "Initializing VGA screen\n\r");
   vga_clear();
