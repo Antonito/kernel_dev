@@ -63,7 +63,7 @@ kernel_logger_print_header(uint8_t const output,
   int32_t ret = 0;
   cmos_rtc_t date = {0, 0, 0, 1, 1, 0, 0};
 
-  cmos_RTC(&date);
+  // cmos_RTC(&date);
   // Print log header
   if (output & LOG_SERIAL) {
     // Output on serial port

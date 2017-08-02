@@ -103,7 +103,7 @@ else
 		@$(ECHO) "Link Flags:\t\t$(LDFLAGS)\n$(CLEAR)"
 endif
 
-clean:
+clean::
 		@$(RM) $(OBJ)
 		@$(RM) $(PRECOMPILED_OBJ)
 		@$(RM_DIR) $(OBJ_DIR)

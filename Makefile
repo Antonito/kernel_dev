@@ -64,5 +64,8 @@ $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS))):
 run:
 	@$(MAKE) $(ARGS) kernel run
 
-.PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))) \
+build:
+		@$(MAKE) $(ARGS) kernel build
+
+.PHONY: no_rule all build $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))) \
 	$(LIBS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS)))

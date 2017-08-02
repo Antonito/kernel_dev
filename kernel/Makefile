@@ -2,11 +2,13 @@
 MK_COMMON_DIR=	./../mk/
 
 # Definitions for Makefile
-NAME=		$(ROOT_DIR)/build/kernel.bin
+NAME=		$(ROOT_DIR)/build/boot/kernel.bin
+
+ISO=		$(ROOT_DIR)/build/kernel.iso
 
 DEBUG=						yes
 
-LOCAL_DEBUG_CFLAGS= -fsanitize=undefined
+LOCAL_DEBUG_CFLAGS= #-fsanitize=undefined
 
 LOCAL_ASFLAGS=			-f elf32
 
@@ -70,5 +72,11 @@ else
 include $(MK_COMMON_DIR)rules.mk
 endif
 
+build:
+		grub-mkrescue -o $(ISO) $(ROOT_DIR)/build/
+
 run:
-		qemu-system-i386 -s -kernel $(NAME)
+		qemu-system-i386 -s $(ISO)
+
+clean::
+		$(RM) $(ISO)

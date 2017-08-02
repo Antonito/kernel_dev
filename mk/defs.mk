@@ -25,7 +25,7 @@ C_VER=		c11
 # Simple OSX check
 ifeq ($(UNAME_S),Darwin)
 CXX=			clang++
-CC=clang
+CC=				clang
 endif
 
 # Debug Infos

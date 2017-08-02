@@ -15,14 +15,14 @@
 	MULTIBOOT_HEADER_FLAGS	equ MULTIBOOT_PAGE_ALIGN | MULTIBOOT_MEMORY_INFO
 	MULTIBOOT_CHECKSUM	equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
 
-	section	.bss
+section	.bss
 	align	0x8
 	[global	boot_stack]
 boot_stack:
 	resb	STACK_SIZE
 boot_stack_top:
 
-	section	.text
+section	.text
 	align	0x4
 MultiBootHeader:
 	;; Multiboot header

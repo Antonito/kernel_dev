@@ -15,7 +15,7 @@ static void init_system() {
 
   // Plateform stuff
   serial_init(SERIAL_COM1);
-  vga_init();
+  // vga_init();
 
   // Memory management
   // Drivers
@@ -28,7 +28,7 @@ void kmain(multiboot_info_t *info, unsigned int eax) {
 
   init_system();
   LOG(LOG_INFO, "System booted\n\r");
-  g_klogger.set_output(LOG_GRAPHIC | LOG_SERIAL);
+  //  g_klogger.set_output(LOG_GRAPHIC | LOG_SERIAL);
   LOG(LOG_INFO, "Welcome to BordOS !\n\r");
   for (;;) {
     __asm__("hlt;");
