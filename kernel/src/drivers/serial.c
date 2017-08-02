@@ -1,3 +1,4 @@
+
 #include <arch/x86/io.h>
 #include <assert.h>
 #include <drivers/serial.h>
@@ -11,14 +12,10 @@ static int32_t serial_is_transmit_empty(uint16_t const port);
 
 // Read datas from a serial port
 static int32_t serial_received(uint16_t const port) {
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
   return inb(port + 5) & 1;
 }
 
 static int32_t serial_is_transmit_empty(uint16_t const port) {
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
   return inb(port + 5) & 0x20;
 }
 
@@ -27,9 +24,6 @@ static int32_t serial_is_transmit_empty(uint16_t const port) {
 //
 
 void serial_init(uint16_t const port) {
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
-
   outb(port + 1, 0x00); // Disable all interrupts
   outb(port + 3, 0x80); // Enable DLAB (set baud rate divisor)
   outb(port + 0, 0x03); // Set divisor to 3 (lo byte) 38400 baud
@@ -41,8 +35,6 @@ void serial_init(uint16_t const port) {
 
 // Read a uint8_t
 uint8_t serial_read(uint16_t const port) {
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
   while (!serial_received(port))
     ;
   return inb(port);
@@ -50,8 +42,6 @@ uint8_t serial_read(uint16_t const port) {
 
 // Write a uint8_t
 void serial_put(uint16_t const port, uint8_t const a) {
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
   while (!serial_is_transmit_empty(port))
     ;
   outb(port, a);
@@ -73,10 +63,7 @@ void serial_write_nb(uint16_t const port, uint32_t const nb,
                      const uint8_t base) {
   static char const *const _base = "0123456789ABCDEF";
 
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
   assert(base <= 16 && "Base should be <= 16");
-
   if (nb > base) {
     serial_write_nb(port, nb / base, base);
   }
@@ -87,8 +74,7 @@ void serial_write_nb(uint16_t const port, uint32_t const nb,
 // Writes a NUL-terminated string
 void serial_write_str(uint16_t const port, char const *str) {
   assert(str);
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
+
   while (*str) {
     serial_put(port, (uint8_t)*str);
     if (*str == '\n') {
@@ -104,9 +90,6 @@ void serial_write_str(uint16_t const port, char const *str) {
 
 // Write a buffer on port
 void serial_write(uint16_t const port, void const *str, size_t len) {
-  assert(port == SERIAL_COM1 || port == SERIAL_COM2 || port == SERIAL_COM3 ||
-         port == SERIAL_COM4);
-
   uint8_t const *data = str;
   while (len) {
     serial_put(port, *data);
@@ -124,13 +107,12 @@ void serial_write(uint16_t const port, void const *str, size_t len) {
 //
 
 int32_t serial_vprintf(char const *restrict format, va_list ap) {
-
   size_t ite = 0;
 
   // TODO: Improve perf (don't write char by char ? :p ), support more
   // formating options
 
-  assert(format && ap && "Format string and va list cannot be nullptr");
+  assert(format && "Format string and va list cannot be nullptr");
   while (format[ite]) {
     if (format[ite] == '%' && format[ite + 1]) {
       ++ite;

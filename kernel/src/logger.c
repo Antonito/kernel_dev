@@ -32,7 +32,6 @@ static int32_t kernel_logger_log(enum kernel_logger_level_e const lvl,
   va_list ap;
   int32_t ret = 0;
 
-  assert(g_klogger.level < NB_LOG_LEVEL);
   if (lvl >= g_klogger.level) {
     va_start(ap, fmt);
     ret = kernel_logger_print_msg(g_klogger.output, lvl, fmt, ap);
@@ -42,13 +41,10 @@ static int32_t kernel_logger_log(enum kernel_logger_level_e const lvl,
 }
 
 static void kernel_logger_set_level(enum kernel_logger_level_e const level) {
-  assert(level >= LOG_DEBUG && level <= LOG_CRITICAL);
   g_klogger.level = level;
 }
 
 static void kernel_logger_set_output(uint8_t const output) {
-  assert(output == LOG_SERIAL || output == LOG_GRAPHIC ||
-         output == (LOG_SERIAL | LOG_GRAPHIC));
   g_klogger.output = output;
 }
 

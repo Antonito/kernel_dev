@@ -1,5 +1,4 @@
 #include <arch/x86/io.h>
-#include <assert.h>
 #include <drivers/cmos.h>
 
 #define CMOS_REG (0x70)
@@ -152,7 +151,6 @@ void cmos_RTC(cmos_rtc_t *const data) {
   cmos_rtc_t last = {0, 0, 0, 0, 0, 0, 0};
   uint8_t registerB;
 
-  assert(data && "Should not be null.");
   __cmos_fill_rtc(data);
 
   /* Avoid incosistent values */

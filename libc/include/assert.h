@@ -2,8 +2,7 @@
 
 #include <stdlib.h>
 
-// TODO : Remove '1 ||'
-#if 1 || defined NDEBUG
+#if defined NDEBUG
 #define assert(x) (void)0
 #else
 #define assert(x)                                                              \
@@ -13,3 +12,5 @@
     }                                                                          \
   } while (0)
 #endif
+
+// TODO: Debug assert()

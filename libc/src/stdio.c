@@ -9,7 +9,6 @@ int vprintf(char const *restrict format, va_list ap) {
   // TODO: Improve perf (don't write char by char ? :p ), support more
   // formating options
 
-  assert(format && ap && "Format string and va list cannot be nullptr");
   while (format[ite]) {
     if (format[ite] == '%' && format[ite + 1]) {
       ++ite;
