@@ -1,7 +1,7 @@
 [bits 32]
 
 	global			start
-	extern			kmain
+	extern			kmain, gdt_flush
 
 	;; Boot informations
 	STACK_SIZE		equ 0x10000
@@ -45,6 +45,9 @@ _kernel_start:
 	;; Push boot informations
 	add	ebx, KERNEL_OFFSET
 	push	ebx
+
+	;; Init GDT
+	call gdt_flush
 
 	;; Start C Kernel
 	mov	ecx, kmain

@@ -6,7 +6,7 @@ NAME=		$(ROOT_DIR)/build/kernel.bin
 
 DEBUG=						yes
 
-LOCAL_DEBUG_CFLAGS=
+LOCAL_DEBUG_CFLAGS= -fsanitize=undefined
 
 LOCAL_ASFLAGS=			-f elf32
 

@@ -1,3 +1,4 @@
+#include <arch/x86/interrupts.h>
 #include <assert.h>
 #include <drivers/serial.h>
 #include <drivers/vga.h>
@@ -8,8 +9,16 @@ void kmain(multiboot_info_t *info, unsigned int eax);
 
 // TODO: Think about a way simpler / generic / automatic way
 static void init_system() {
+
+  // Init arch
+  // init_idt();
+
+  // Plateform stuff
   serial_init(SERIAL_COM1);
   vga_init();
+
+  // Memory management
+  // Drivers
 }
 
 void kmain(multiboot_info_t *info, unsigned int eax) {

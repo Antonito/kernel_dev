@@ -9,6 +9,9 @@ extern "C" {
 // Should not be called alone, use abort()
 __attribute__((noreturn)) void abort_handler();
 
+// Kernel panic
+__attribute__((noreturn)) void panic(char const *str);
+
 #if defined__cplusplus
 }
 #endif

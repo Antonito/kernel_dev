@@ -19,3 +19,13 @@ abort_handler(char const *const msg, char const *const file, int32_t line) {
     __asm__("hlt;");
   }
 }
+
+__attribute__((noreturn)) void panic(char const *str) {
+  __asm__("cli;");
+
+  LOG(LOG_CRITICAL, "Kenrel panic: %s\n\r", str);
+
+  for (;;) {
+    __asm__("hlt;");
+  }
+}
