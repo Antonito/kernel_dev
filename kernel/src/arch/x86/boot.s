@@ -8,33 +8,27 @@
 	KERNEL_OFFSET		equ 0x00000000
 	KERNEL_PAGE_NUMBER	equ (KERNEL_OFFSET >> 22)
 
-	;; Multiboot macros
-	MULTIBOOT_PAGE_ALIGN	equ 1 << 0
-	MULTIBOOT_MEMORY_INFO	equ 1 << 1
-	MULTIBOOT_HEADER_MAGIC	equ 0x1BADB002
-	MULTIBOOT_HEADER_FLAGS	equ MULTIBOOT_PAGE_ALIGN | MULTIBOOT_MEMORY_INFO
-	MULTIBOOT_CHECKSUM	equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
+section .header
+align 8
+mb_header_start:
+		dd 0xe85250d6						;; magic number (multiboot 2)
+		dd 0										;; architecture 0 (protected mode of i386)
+		dd mb_header_end - mb_header_start	;; header length
 
-section	.bss
-	align	0x8
-	[global	boot_stack]
-boot_stack:
-	resb	STACK_SIZE
-boot_stack_top:
+		;; checksum
+		dd 0x100000000 - (0xe85250d6 + (mb_header_end - mb_header_start))
+
+		;; required end tag
+		dw 0					;; type
+		dw 0					;; flags
+		dd 8					;; size
+mb_header_end:
 
 section	.text
-	align	0x4
-MultiBootHeader:
-	;; Multiboot header
-	dd	MULTIBOOT_HEADER_MAGIC
-	dd	MULTIBOOT_HEADER_FLAGS
-	dd	MULTIBOOT_CHECKSUM
-
 start:
 	cli
 
 _kernel_start:
-
 	;; Setup stack
 	mov	esp, boot_stack
 	mov	ebp, boot_stack
@@ -52,3 +46,11 @@ _kernel_start:
 	;; Start C Kernel
 	mov	ecx, kmain
 	call	ecx
+
+;; Declare a stack
+section	.bss
+		align	0x8
+		[global	boot_stack]
+boot_stack:
+		resb	STACK_SIZE
+boot_stack_top:

@@ -169,21 +169,19 @@ void isr_default_int(struct s_regs *r) {
 extern struct idt_entry *idtptr;
 
 void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags) {
-  /* Base */
+  // Base (callback)
   idtptr[num].base_low = base & 0xFFFF;
   idtptr[num].base_high = (base >> 16) & 0xFFFF;
 
-  /* Segment + flags */
+  // Segments + flags
   idtptr[num].sel = sel;
   idtptr[num].always0 = 0;
   idtptr[num].flags = flags;
 }
 
 void init_idt(void) {
-  /* Set everything to 0 */
-  memset(idtptr, 0, sizeof(struct idt_entry) * 0xFF);
 
-  /* Add ISR handlers */
+  // Add ISR handler
   idt_set_gate(0, (unsigned)_isr0, 0x08, 0x8E);
   idt_set_gate(1, (unsigned)_isr1, 0x08, 0x8E);
   idt_set_gate(2, (unsigned)_isr2, 0x08, 0x8E);
@@ -217,7 +215,7 @@ void init_idt(void) {
   idt_set_gate(30, (unsigned)_isr30, 0x08, 0x8E);
   idt_set_gate(31, (unsigned)_isr31, 0x08, 0x8E);
 
-  /* Actually install idt */
+  // Install IDT
   __asm__("lidt %0" : : "m"(idtptr));
   init_irq();
 }

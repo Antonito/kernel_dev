@@ -3,15 +3,15 @@
 #include <drivers/serial.h>
 #include <drivers/vga.h>
 #include <kernel/logger.h>
-#include <multiboot.h>
+#include <multiboot2.h>
 
-void kmain(multiboot_info_t *info, unsigned int eax);
+void kmain(void *info, unsigned int eax);
 
 // TODO: Think about a way simpler / generic / automatic way
 static void init_system() {
 
   // Init arch
-  // init_idt();
+  init_idt();
 
   // Plateform stuff
   serial_init(SERIAL_COM1);
@@ -21,8 +21,8 @@ static void init_system() {
   // Drivers
 }
 
-void kmain(multiboot_info_t *info, unsigned int eax) {
-  if (eax != MULTIBOOT_BOOTLOADER_MAGIC) {
+void kmain(void *info, unsigned int eax) {
+  if (eax != MULTIBOOT2_BOOTLOADER_MAGIC) {
     return;
   }
 
