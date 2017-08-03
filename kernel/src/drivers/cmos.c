@@ -6,7 +6,7 @@
 
 #define CURRENT_YEAR (2017)
 
-/* Doc: http://www.bioscentral.com/misc/cmosmap.htm */
+// Doc: http://www.bioscentral.com/misc/cmosmap.htm
 enum CMOS_VALUES {
   CMOS_RTC_SEC = 0x00,
   CMOS_RTC_SEC_ALARM = 0x01,
@@ -99,13 +99,13 @@ enum CMOS_VALUES {
   CMOS_RSV13
 };
 
-/* Read a value from CMOS */
+// Read a value from CMOS
 static inline uint8_t cmos_read_raw(uint8_t reg) {
   outb(CMOS_REG, reg);
   return inb(CMOS_DATA);
 }
 
-/* Read the whole CMOS */
+// Read the whole CMOS
 void cmos_read(uint8_t _128arr[]) {
   for (uint8_t i = 0; i < 128; ++i) {
     __asm__("cli;");
@@ -114,13 +114,13 @@ void cmos_read(uint8_t _128arr[]) {
   }
 }
 
-/* Writes a value to the CMOS */
+// Writes a value to the CMOS
 static inline void cmos_write_raw(uint8_t reg, uint8_t val) {
   outb(CMOS_REG, reg);
   outb(CMOS_DATA, val);
 }
 
-/* Completly rewrite the CMOS */
+// Completly rewrite the CMOS
 void cmos_write(uint8_t _128arr[]) {
   for (uint8_t i = 0; i < 128; ++i) {
     __asm__("cli;");
@@ -153,7 +153,7 @@ void cmos_RTC(cmos_rtc_t *const data) {
 
   __cmos_fill_rtc(data);
 
-  /* Avoid incosistent values */
+  // Avoid incosistent values
   do {
     last.seconds = data->seconds;
     last.minuts = data->minuts;
@@ -169,7 +169,7 @@ void cmos_RTC(cmos_rtc_t *const data) {
            last.century != data->century);
   registerB = cmos_read_raw(CMOS_STAT_REG_B);
 
-  /* Convert BCD to binary, if needed */
+  // Convert BCD to binary, if needed
   if (!(registerB & 0x4)) {
     data->seconds = BCD2BIN(data->seconds);
     data->minuts = BCD2BIN(data->minuts);
@@ -181,16 +181,13 @@ void cmos_RTC(cmos_rtc_t *const data) {
     data->century = BCD2BIN(data->century);
   }
 
-  /* Convert clock to 24h format, if needed */
+  // Convert clock to 24h format, if needed
   if (!(registerB & 0x02) && (data->hour & 0x80)) {
     data->hour = ((data->hour & 0x7F) + 12) % 24;
   }
 
-  /* Calculate the 4-digit year */
-  if (data->century != 0) /* In fact, you check the register */
-  {
-    ;
-  } else {
+  // Calculate the 4-digit year
+  if (data->century == 0) {
     data->year += (CURRENT_YEAR / 100) * 100;
     if (data->year > CURRENT_YEAR) {
       data->year += 100;
