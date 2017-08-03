@@ -154,7 +154,7 @@ mov	  eax, esp
 push	eax
 
 ;; Call handler
-;mov	  eax, irq_handler
+mov	  eax, irq_handler
 call	eax
 
 ;; Restore registers

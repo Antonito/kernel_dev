@@ -268,7 +268,7 @@ isr_common_stub:
   mov		gs, ax
   mov		eax, esp
   push	eax
-;  mov		eax, isr_default_int
+  mov		eax, isr_default_int
   call	eax
   pop		eax
   pop		gs

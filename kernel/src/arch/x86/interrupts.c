@@ -1,5 +1,6 @@
 #include <arch/x86/interrupts.h>
 #include <arch/x86/io.h>
+#include <kernel/logger.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -61,7 +62,7 @@ extern void _isr31();
 static void init_irq(void);
 static void irq_remap(void);
 
-void *irq_routines[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static void (*irq_routines[16])(struct s_regs *reg) = {0};
 
 void irq_set_routine(int32_t irq, void (*handler)(struct s_regs *reg)) {
   irq_routines[irq] = handler;
@@ -166,20 +167,25 @@ void isr_default_int(struct s_regs *r) {
 //
 // IDT
 //
-extern struct idt_entry *idtptr;
+extern void idt_load(void);
+static struct idt_entry idt[256] = {{0, 0, 0, 0, 0}};
+struct idt_reg idtr = {0, 0};
 
 void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags) {
   // Base (callback)
-  idtptr[num].base_low = base & 0xFFFF;
-  idtptr[num].base_high = (base >> 16) & 0xFFFF;
+  idt[num].base_low = base & 0xFFFF;
+  idt[num].base_high = (base >> 16) & 0xFFFF;
 
   // Segments + flags
-  idtptr[num].sel = sel;
-  idtptr[num].always0 = 0;
-  idtptr[num].flags = flags;
+  idt[num].sel = sel;
+  idt[num].always0 = 0;
+  idt[num].flags = flags;
 }
 
 void init_idt(void) {
+  // Setup idtr
+  idtr.limit = (sizeof(struct idt_entry) * 256) - 1;
+  idtr.base = (uint32_t)&idt;
 
   // Add ISR handler
   idt_set_gate(0, (unsigned)_isr0, 0x08, 0x8E);
@@ -216,6 +222,9 @@ void init_idt(void) {
   idt_set_gate(31, (unsigned)_isr31, 0x08, 0x8E);
 
   // Install IDT
-  __asm__("lidt %0" : : "m"(idtptr));
+  idt_load();
   init_irq();
+
+  // Activate interrupts
+  __asm__("sti;");
 }

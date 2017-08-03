@@ -7,10 +7,10 @@ This project has an educational-only purpose.
 - [x] Kernel start
   - [x] Multiboot
   - [x] x86 ASM to C
-- [ ] CPU Initialization
-  - [ ] GDT
-  - [ ] IRQ
-  - [ ] ISR
+- [x] CPU Initialization
+  - [x] GDT
+  - [x] IRQ
+  - [x] ISR
 - [x] Logger
   - [x] Date / Time detection
   - [x] Serial
@@ -27,5 +27,8 @@ This project has an educational-only purpose.
 - [ ] Filesystem
 - [ ] PCI Device detection
 - [ ] Network Stack
+- [ ] Debug utilities
+  - [x] UBSan
+  - [ ] ASan
 
 I won't accept any pull request for now, as I want this to be a personal work, but feel free to open issues !

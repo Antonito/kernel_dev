@@ -1,19 +1,9 @@
-[bits 32]
+[BITS 32]
+section .text
 
-global idt
-global idtptr
+global	idt_load
+extern	idtr
 
-section .data
-align 16
-;; Interrupt Descriptor Table
-idt:
-idt_start:
-	times 255 dq 0		; 255 empty entries
-idt_end:
-
-section .rodata
-align 16
-;; IDT descriptor
-idtptr:
-	dw idt_end - idt_start - 1
-	dd idt
+idt_load:
+lidt	[idtr]
+ret

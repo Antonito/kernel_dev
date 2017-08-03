@@ -6,7 +6,7 @@ global gdt_flush
 section .text
 ;; Loads the GDT table
 gdt_flush:
-	lgdt		[gdtptr_phys]
+	lgdt	[gdtptr_phys]
 	mov		ax, 0x10
 	mov		ds, ax
 	mov		es, ax

@@ -4,8 +4,6 @@
 #include <stdio.h>
 
 int vprintf(char const *restrict format, va_list ap) {
-  return 0;
-#if 0
   size_t ite = 0;
 
   // TODO: Improve perf (don't write char by char ? :p ), support more
@@ -44,7 +42,6 @@ int vprintf(char const *restrict format, va_list ap) {
     ++ite;
   }
   return (int32_t)ite;
-#endif
 }
 
 int printf(char const *restrict format, ...) {

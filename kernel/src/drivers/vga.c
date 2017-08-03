@@ -52,7 +52,7 @@ static void vga_move_cursor(void) {
   uint32_t const temp = vga_data.y * vga_width + vga_data.x;
 
   outb(0x3D4, 14);
-  outb(0x3D5, temp >> 8);
+  outb(0x3D5, (uint8_t)(temp >> 8));
   outb(0x3D4, 15);
   outb(0x3D5, temp & 0xFF);
 }
@@ -62,17 +62,13 @@ void vga_setcolor(enum vga_color_e const fg, enum vga_color_e const bg) {
 }
 
 void vga_clear(void) {
-  uint16_t blank = 0x20 | (vga_data.attr);
-
-  // Fill buffer
-  for (int32_t i = 0; i < vga_width * vga_height; ++i) {
-    vga_data.buff[i] = blank;
-  }
-
   // Update buffer
   for (int32_t i = 0; i < vga_height; ++i) {
-    memcpy(vga_buffer + vga_width * i, vga_data.buff,
-           sizeof(uint16_t) * vga_width);
+    for (int32_t j = 0; j < vga_width; ++j) {
+      uint16_t const blank = 0x20 | (vga_data.attr);
+
+      vga_buffer[i * vga_width + j] = blank;
+    }
   }
 
   // Update cursor
@@ -108,7 +104,7 @@ void vga_put(uint8_t const c) {
   // Any character >= ' ' is printable
   else if (c >= ' ') {
     uint16_t *const where = &vga_buffer[vga_data.y * vga_width + vga_data.x];
-    *where = ((uint16_t)c | (uint16_t)vga_data.attr << 8);
+    *where = ((uint16_t)c | (uint16_t)(vga_data.attr << 8));
     ++vga_data.x;
   }
 

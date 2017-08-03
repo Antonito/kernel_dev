@@ -44,7 +44,7 @@ _kernel_start:
 	call gdt_flush
 
 	;; Start C Kernel
-	mov	ecx, kmain
+	mov		ecx, kmain
 	call	ecx
 
 ;; Declare a stack
