@@ -12,12 +12,6 @@
 // http://isse.cqu.edu.cn/svn/epos/kernel/ide.c
 // http://isse.cqu.edu.cn/svn/epos/kernel/
 
-#define ATA_PRIMARY_IO 0x1F0
-#define ATA_SECONDARY_IO 0x170
-
-#define ATA_PRIMARY_DCR_AS 0x3F6
-#define ATA_SECONDARY_DCR_AS 0x376
-
 static void repinsw(uint16_t port, uint8_t *data, uint32_t size);
 static void repoutsw(uint16_t port, uint8_t *data, uint32_t size);
 static void delay400ns(uint16_t bus);
@@ -97,9 +91,8 @@ static void ide_init(uint16_t bus) {
 
   ata_wait_ready(bus);
 
-  ata_identify_t device = {0,   {0}, {0}, {0}, {0}, {0}, 0, 0,  {0},
-                           {0}, 0,   {0}, 0,   0,   {0}, 0, {0}};
-
+  ata_identify_t device; // = kcalloc(sizeof(device)); // TODO: Alloc
+  memset(&device, 0, sizeof(device));
   buf = (uint16_t *)&device;
 
   for (i = 0; i < 256; ++i) {
@@ -114,8 +107,26 @@ static void ide_init(uint16_t bus) {
   }
 
   outb(bus + ATA_REG_CONTROL, 0x02);
-  LOG(LOG_INFO, "ATA:\n\rSerial: %s\n\rFirmware: %s\n\rModel: %s\n\r",
-      device.serial, device.firmware, device.model);
+  if (device.flags) {
+    char serial[sizeof(device.serial) + 1];
+    char firmware[sizeof(device.firmware) + 1];
+    char model[sizeof(device.model) + 1];
+
+    memcpy(serial, device.serial, sizeof(device.serial));
+    memcpy(firmware, device.firmware, sizeof(device.firmware));
+    memcpy(model, device.model, sizeof(device.model));
+    serial[sizeof(device.serial)] = '\0';
+    firmware[sizeof(device.firmware)] = '\0';
+    model[sizeof(device.model)] = '\0';
+
+    LOG(LOG_INFO,
+        "ATA:\n\rFlags: %x\n\rSerial: %s\n\rFirmware: %s\n\rModel: %s\n\r",
+        device.flags, serial, firmware, model);
+    // TODO: Don't use hardcoded values
+    struct device_t dev = {"Primary disk", 32,         DEVICE_BLOCK, NULL,
+                           &ata_read,      &ata_write, device};
+  }
+  // else { kfree(device); } // TODO: Alloc
 }
 
 static void ide_read_sector(uint16_t bus, uint8_t slave, uint32_t lba,

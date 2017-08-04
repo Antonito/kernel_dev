@@ -25,6 +25,10 @@ This project has an educational-only purpose.
   - [ ] Ring3
   - [ ] Syscalls
 - [ ] Filesystem
+  - [ ] ATA / IDE driver
+  - [ ] VFS
+  - [ ] FAT16
+  - [ ] EXT2
 - [ ] PCI Device detection
 - [ ] Network Stack
 - [ ] Debug utilities

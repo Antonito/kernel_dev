@@ -82,6 +82,12 @@ enum ata_drive_e { ATA_MASTER = 0x00, ATA_SLAVE = 0x01 };
 #define ATA_REG_ALTSTATUS 0x0C
 #define ATA_REG_DEVADDRESS 0x0D
 
+#define ATA_PRIMARY_IO 0x1F0
+#define ATA_SECONDARY_IO 0x170
+
+#define ATA_PRIMARY_DCR_AS 0x3F6
+#define ATA_SECONDARY_DCR_AS 0x376
+
 // Channels
 enum ata_chan_e { ATA_PRIMARY = 0x00, ATA_SECONDARY = 0x01 };
 
@@ -118,6 +124,6 @@ typedef struct ata_identify {
   uint16_t unused6[38];
   uint64_t sectors_48;
   uint16_t unused7[152];
-} __attribute__((packed)) ata_identify_t;
+} ata_identify_t;
 
 void ata_init(void);
