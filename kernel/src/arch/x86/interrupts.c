@@ -186,6 +186,7 @@ void init_idt(void) {
   // Setup idtr
   idtr.limit = (sizeof(struct idt_entry) * 256) - 1;
   idtr.base = (uint32_t)&idt;
+  memset(idt, 0, sizeof(idt));
 
   // Add ISR handler
   idt_set_gate(0, (unsigned)_isr0, 0x08, 0x8E);

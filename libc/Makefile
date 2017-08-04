@@ -13,6 +13,12 @@ LOCAL_COMP_CFLAGS=	-O2												\
 										-nostdlib									\
 										-m32											\
 										-ffreestanding						\
+										-mno-sse 									\
+										-mno-sse2 								\
+										-mno-sse3 								\
+										-mno-sse4.1 							\
+										-mno-sse4.2 							\
+										-mno-sse4									\
 										-isystem ./include
 
 LOCAL_COMP_FLAGS=

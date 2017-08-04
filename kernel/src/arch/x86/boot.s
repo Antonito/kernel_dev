@@ -4,7 +4,7 @@
 	extern			kmain, gdt_flush
 
 	;; Boot informations
-	STACK_SIZE		equ 0x10000
+	STACK_SIZE		equ 0x1000 * 16
 	KERNEL_OFFSET		equ 0x00000000
 	KERNEL_PAGE_NUMBER	equ (KERNEL_OFFSET >> 22)
 
@@ -30,8 +30,8 @@ start:
 
 _kernel_start:
 	;; Setup stack
-	mov	esp, boot_stack
-	mov	ebp, boot_stack
+	mov	esp, boot_stack_top
+	mov	ebp, boot_stack_top
 
 	;; Push magic number
 	push	eax
@@ -49,8 +49,7 @@ _kernel_start:
 
 ;; Declare a stack
 section	.bss
-		align	0x8
-		[global	boot_stack]
+		align 0x1000
 boot_stack:
 		resb	STACK_SIZE
 boot_stack_top:

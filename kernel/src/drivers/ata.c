@@ -5,10 +5,18 @@
 #include <drivers/device.h>
 #include <kernel/logger.h>
 #include <stddef.h>
+#include <string.h>
 
 // Doc:
 // https://github.com/levex/osdev/blob/bba025f8cfced6ad1addc625aaf9dab8fa7aef80/drivers/ata.c
 // http://isse.cqu.edu.cn/svn/epos/kernel/ide.c
+// http://isse.cqu.edu.cn/svn/epos/kernel/
+
+#define ATA_PRIMARY_IO 0x1F0
+#define ATA_SECONDARY_IO 0x170
+
+#define ATA_PRIMARY_DCR_AS 0x3F6
+#define ATA_SECONDARY_DCR_AS 0x376
 
 static void repinsw(uint16_t port, uint8_t *data, uint32_t size);
 static void repoutsw(uint16_t port, uint8_t *data, uint32_t size);
@@ -16,6 +24,7 @@ static void delay400ns(uint16_t bus);
 static int32_t ata_wait(uint16_t bus, int32_t advanced);
 static void ata_wait_ready(uint16_t bus);
 static void ata_select(uint16_t bus);
+static void ide_init(uint16_t bus);
 static void ata_primary_irq(struct s_regs *reg);
 static void ata_secondary_irq(struct s_regs *reg);
 static void ide_read_sector(uint16_t bus, uint8_t slave, uint32_t lba,
@@ -70,7 +79,7 @@ static void ata_wait_ready(uint16_t bus) {
 
 static void ata_select(uint16_t bus) { outb(bus + ATA_REG_HDDEVSEL, 0xA0); }
 
-void ide_init(uint16_t bus) {
+static void ide_init(uint16_t bus) {
   int i;
   uint16_t *buf;
   uint8_t *ptr;
@@ -88,7 +97,9 @@ void ide_init(uint16_t bus) {
 
   ata_wait_ready(bus);
 
-  ata_identify_t device;
+  ata_identify_t device = {0,   {0}, {0}, {0}, {0}, {0}, 0, 0,  {0},
+                           {0}, 0,   {0}, 0,   0,   {0}, 0, {0}};
+
   buf = (uint16_t *)&device;
 
   for (i = 0; i < 256; ++i) {
@@ -103,6 +114,8 @@ void ide_init(uint16_t bus) {
   }
 
   outb(bus + ATA_REG_CONTROL, 0x02);
+  LOG(LOG_INFO, "ATA:\n\rSerial: %s\n\rFirmware: %s\n\rModel: %s\n\r",
+      device.serial, device.firmware, device.model);
 }
 
 static void ide_read_sector(uint16_t bus, uint8_t slave, uint32_t lba,
@@ -174,6 +187,7 @@ static uint8_t ata_write(uint8_t *buffer, uint32_t offset, uint32_t len,
   return 1;
 }
 
+#if 0
 static void ata_probe(void) {
   LOG(LOG_INFO, "Probing ATA drives\r\n");
   // Check for primary master disk
@@ -193,10 +207,12 @@ static void ata_probe(void) {
     device_add(&dev);
   }
 }
+#endif
 
 void ata_init(void) {
   LOG(LOG_INFO, "Initializing ATA driver\r\n");
   irq_set_routine(14, &ata_primary_irq);
   irq_set_routine(15, &ata_secondary_irq);
-  ata_probe();
+  ide_init(ATA_PRIMARY_IO);
+  ide_init(ATA_SECONDARY_IO);
 }

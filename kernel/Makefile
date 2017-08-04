@@ -80,7 +80,10 @@ build:
 		grub-mkrescue -o $(ISO) $(ROOT_DIR)/build/
 
 run:
-		qemu-system-i386 -s $(ISO)
+		qemu-system-i386 -s $(ISO) \
+		-drive file=$(ROOT_DIR)/hdd.img,if=none,id=mydisk \
+    -device ich9-ahci,id=ahci \
+    -device ide-drive,drive=mydisk,bus=ahci.0
 
 clean::
 		$(RM) $(ISO)

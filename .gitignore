@@ -46,3 +46,6 @@ vgcore.*
 
 # gdb
 .gdb_history
+
+# qemu
+*.img
