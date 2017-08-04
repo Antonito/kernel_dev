@@ -42,6 +42,10 @@ include $(MK_COMMON_DIR)colors.mk $(MK_COMMON_DIR)defs.mk
 
 LD=									i386-unknown-linux-gnu-ld
 
+ifneq ($(CC), clang)
+LOCAL_LINK_FLAGS+=	-lgcc
+endif
+
 # Project's directories
 
 SRC_DIR=	./src/

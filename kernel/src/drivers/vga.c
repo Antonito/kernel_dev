@@ -18,7 +18,6 @@ struct vga_data_t {
   uint8_t y;
   uint8_t attr;
   uint8_t __padding;
-  uint16_t buff[VGA_WIDTH * VGA_WIDTH];
 };
 
 #undef VGA_WIDTH
@@ -27,7 +26,7 @@ struct vga_data_t {
 static void vga_scroll(void);
 static void vga_move_cursor(void);
 
-static struct vga_data_t vga_data = {0, 0, 0, 0, {0}};
+static struct vga_data_t vga_data = {0, 0, 0, 0};
 
 static void vga_scroll(void) {
   uint16_t blank = (uint16_t)(0x20 | (vga_data.attr << 8));

@@ -1,5 +1,6 @@
 #include <arch/x86/interrupts.h>
 #include <assert.h>
+#include <drivers/ata.h>
 #include <drivers/serial.h>
 #include <drivers/vga.h>
 #include <kernel/logger.h>
@@ -18,7 +19,9 @@ static void init_system() {
   vga_init();
 
   // Memory management
+
   // Drivers
+  ata_init();
 }
 
 void kmain(void *info, unsigned int eax) {
