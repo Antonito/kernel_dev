@@ -36,10 +36,11 @@ This project has an educational-only purpose.
   - [ ] ASan
 - [x] SSE support
   - [x] SSE
-  - [ ] SSE2
-  - [ ] SSE3
-  - [ ] SSE4.1
-  - [ ] SSE4.2
-  - [ ] SSE4A
+  - [x] SSE2
+  - [x] SSE3
+  - [x] SSSE3
+  - [x] SSE4.1
+  - [x] SSE4.2
+  - [x] SSE4A
 
 I won't accept any pull request for now, as I want this to be a personal work, but feel free to open issues !
