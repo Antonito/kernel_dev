@@ -1,5 +1,6 @@
 #include <arch/x86/interrupts.h>
 #include <arch/x86/io.h>
+#include <arch/x86/utils.h>
 #include <assert.h>
 #include <drivers/ata.h>
 #include <drivers/device.h>
@@ -12,8 +13,6 @@
 // http://isse.cqu.edu.cn/svn/epos/kernel/ide.c
 // http://isse.cqu.edu.cn/svn/epos/kernel/
 
-static void repinsw(uint16_t port, uint8_t *data, uint32_t size);
-static void repoutsw(uint16_t port, uint8_t *data, uint32_t size);
 static void delay400ns(uint16_t bus);
 static int32_t ata_wait(uint16_t bus, int32_t advanced);
 static void ata_wait_ready(uint16_t bus);
@@ -25,17 +24,10 @@ static void ide_read_sector(uint16_t bus, uint8_t slave, uint32_t lba,
                             uint8_t *buf);
 static void ide_write_sector(uint16_t bus, uint8_t slave, uint32_t lba,
                              uint8_t *buf);
-
-static void repinsw(uint16_t port, uint8_t *data, uint32_t size) {
-  __asm__ __volatile__("rep insw"
-                       : "+D"(data), "+c"(size)
-                       : "d"(port)
-                       : "memory");
-}
-
-static void repoutsw(uint16_t port, uint8_t *data, uint32_t size) {
-  __asm__ __volatile__("rep outsw" : "+S"(data), "+c"(size) : "d"(port));
-}
+static uint8_t ata_read(uint8_t *buffer, uint32_t offset, uint32_t len,
+                        void *dev);
+static uint8_t ata_write(uint8_t *buffer, uint32_t offset, uint32_t len,
+                         void *dev);
 
 static void delay400ns(uint16_t bus) {
   inb(bus + ATA_REG_ALTSTATUS);
@@ -124,7 +116,8 @@ static void ide_init(uint16_t bus) {
         device.flags, serial, firmware, model);
     // TODO: Don't use hardcoded values
     struct device_t dev = {"Primary disk", 32,         DEVICE_BLOCK, NULL,
-                           &ata_read,      &ata_write, device};
+                           &ata_read,      &ata_write, &device};
+    (void)dev;
   }
   // else { kfree(device); } // TODO: Alloc
 }
@@ -175,9 +168,9 @@ static void ide_write_sector(uint16_t bus, uint8_t slave, uint32_t lba,
   ata_wait(bus, 0);
 }
 
-static void ata_primary_irq(struct s_regs *reg) {}
+static void ata_primary_irq(struct s_regs *reg) { (void)reg; }
 
-static void ata_secondary_irq(struct s_regs *reg) {}
+static void ata_secondary_irq(struct s_regs *reg) { (void)reg; }
 
 static uint8_t ata_read(uint8_t *buffer, uint32_t offset, uint32_t len,
                         void *dev) {
@@ -226,4 +219,6 @@ void ata_init(void) {
   irq_set_routine(15, &ata_secondary_irq);
   ide_init(ATA_PRIMARY_IO);
   ide_init(ATA_SECONDARY_IO);
+  (void)ide_write_sector;
+  (void)ide_read_sector;
 }

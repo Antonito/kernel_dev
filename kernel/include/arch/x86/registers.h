@@ -28,3 +28,5 @@ struct s_regs {
   uint32_t useresp;
   uint32_t ss;
 };
+
+void init_sse(void);
